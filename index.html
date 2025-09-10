@@ -101,9 +101,41 @@
         right: 1rem;
         z-index: 1080;
       }
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: #000;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        z-index: 2000;
+        padding: 1rem;
+      }
+      .blink {
+        animation: blink 1s steps(2, start) infinite;
+      }
+      @keyframes blink {
+        to {
+          visibility: hidden;
+        }
+      }
     </style>
   </head>
   <body class="bg-body-tertiary">
+    <div id="error-screen" class="overlay d-none">
+      <img src="./assets/marca-thx.png" alt="THX Logtech" style="max-height: 150px" />
+      <p class="mt-3">Erro ao acessar o link da vaga.</p>
+    </div>
+    <div id="loading-screen" class="overlay d-none">
+      <img src="./assets/marca-thx.png" alt="THX Logtech" class="blink" style="max-height: 150px" />
+    </div>
+    <div id="success-screen" class="overlay d-none">
+      <img src="./assets/marca-thx.png" alt="THX Logtech" style="max-height: 150px" />
+      <p class="mt-3">Formulário enviado com sucesso!</p>
+    </div>
     <main class="container py-4">
       <div class="glass">
         <header class="mb-4 text-center">
@@ -555,6 +587,10 @@
         else id = localStorage.getItem(STORAGE_KEY);
         hidden.value = id || '';
         if (id) setUrlId(id);
+        else {
+          document.querySelector('main').classList.add('d-none');
+          document.getElementById('error-screen').classList.remove('d-none');
+        }
       })();
 
       /* ---------- Serialização & normalização ---------- */
@@ -600,6 +636,8 @@
       (function () {
         const form = document.getElementById('form-vaga');
         const submitBtn = form.querySelector('button[type="submit"]');
+        const loadingOverlay = document.getElementById('loading-screen');
+        const successOverlay = document.getElementById('success-screen');
 
         form.addEventListener(
           'submit',
@@ -617,6 +655,7 @@
             ev.preventDefault();
             submitBtn.disabled = true;
             submitBtn.textContent = 'Enviando...';
+            loadingOverlay.classList.remove('d-none');
 
             try {
               const fd = new FormData(form);
@@ -647,13 +686,15 @@
                 const txt = await resp.text().catch(() => '');
                 throw new Error(`Falha ao enviar (${resp.status}): ${txt || resp.statusText}`);
               }
-
-              showToast('Formulário enviado com sucesso!', 'success');
+              loadingOverlay.classList.add('d-none');
+              successOverlay.classList.remove('d-none');
+              document.querySelector('main').classList.add('d-none');
               form.reset();
               form.classList.remove('was-validated');
             } catch (err) {
               showToast(err.message || 'Erro ao validar/enviar.', 'error');
             } finally {
+              loadingOverlay.classList.add('d-none');
               submitBtn.disabled = false;
               submitBtn.textContent = 'Enviar';
             }
