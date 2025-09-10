@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="pt-BR" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Formulário de Recrutamento</title>
+    <link rel="icon" type="image/png" href="./assets/marca-thx.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+      :root {
+        --page-padding-x: 1rem;
+        --section-radius: 0.8rem;
+      }
+      html {
+        font-size: 18px;
+      }
+      @media (max-width: 480px) {
+        html {
+          font-size: 16px;
+        }
+      }
+
+      body {
+        margin: 0;
+        padding: 0 var(--page-padding-x);
+        font-family: 'Poppins', Arial, sans-serif;
+        line-height: 1.5;
+        color: #222;
+        min-height: 100vh;
+        background: url('./assets/thx-logtech-comercial.jpg') center/cover no-repeat fixed;
+      }
+
+      header img {
+        max-height: 120px;
+        height: auto;
+        width: auto;
+      }
+
+      /* Largura do formulário */
+      main .glass {
+        max-width: 800px;
+        margin: auto;
+      }
+
+      .section-card {
+        border-radius: var(--section-radius);
+      }
+      .section-card + .section-card {
+        margin-top: 0.75rem;
+      }
+      .thin-hr {
+        margin: 0.75rem 0;
+        opacity: 0.25;
+      }
+      .choice-stack .form-check + .form-check {
+        margin-top: 0.25rem;
+      }
+      .required-asterisk::after {
+        content: ' *';
+        color: var(--bs-danger);
+      }
+
+      /* Itens dinâmicos */
+      .dyn-item {
+        position: relative;
+      }
+      .dyn-remove {
+        position: absolute;
+        right: 0.5rem;
+        top: 0.5rem;
+      }
+
+      /* Botões "Sim/Não" mais compactos */
+      .btn-group-compact {
+        max-width: 420px;
+        width: 100%;
+        margin: 0.25rem auto 0;
+        display: flex;
+        gap: 0.5rem;
+      }
+      .btn-group-compact .btn {
+        flex: 1 1 0;
+      }
+
+      input[type='number']::-webkit-inner-spin-button,
+      input[type='number']::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      /* Toast container fixo no topo direito */
+      .toast-container {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 1080;
+      }
+    </style>
+  </head>
+  <body class="bg-body-tertiary">
+    <main class="container py-4">
+      <div class="glass">
+        <header class="mb-4 text-center">
+          <img src="./assets/marca-thx.png" alt="THX Logtech" class="img-fluid mb-2" style="max-height: 350px; height: auto; width: auto" />
+          <p style="color: yellow" class="mb-0">Campos marcados com * são obrigatórios.</p>
+        </header>
+
+        <form id="form-vaga" class="needs-validation" novalidate>
+          <input type="hidden" id="vagaId" name="vagaId" />
+
+          <!-- Dados Pessoais -->
+          <section class="card section-card shadow-sm">
+            <div class="card-header bg-body-tertiary"><h2 class="h5 mb-0">Dados Pessoais</h2></div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-12 col-md-6">
+                  <label for="fullName" class="form-label required-asterisk">Nome completo</label>
+                  <input id="fullName" name="fullName" type="text" class="form-control" placeholder="Digite seu nome completo" autocomplete="name" required />
+                  <div class="invalid-feedback">Informe seu nome completo.</div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="email" class="form-label required-asterisk">E-mail</label>
+                  <input id="email" name="email" type="email" class="form-control" placeholder="email@exemplo.com" autocomplete="email" required />
+                  <div class="invalid-feedback">Informe um e-mail válido.</div>
+                </div>
+              </div>
+
+              <hr class="thin-hr" />
+
+              <div class="row g-3">
+                <div class="col-12 col-md-6">
+                  <label for="city" class="form-label">Cidade</label>
+                  <input id="city" name="city" type="text" class="form-control" placeholder="Cidade" autocomplete="address-level2" />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="state" class="form-label">Estado</label>
+                  <select id="state" name="state" class="form-select" autocomplete="address-level1">
+                    <option value selected disabled>UF</option>
+                    <option value="AC">AC - Acre</option>
+                    <option value="AL">AL - Alagoas</option>
+                    <option value="AP">AP - Amapá</option>
+                    <option value="AM">AM - Amazonas</option>
+                    <option value="BA">BA - Bahia</option>
+                    <option value="CE">CE - Ceará</option>
+                    <option value="DF">DF - Distrito Federal</option>
+                    <option value="ES">ES - Espírito Santo</option>
+                    <option value="GO">GO - Goiás</option>
+                    <option value="MA">MA - Maranhão</option>
+                    <option value="MT">MT - Mato Grosso</option>
+                    <option value="MS">MS - Mato Grosso do Sul</option>
+                    <option value="MG">MG - Minas Gerais</option>
+                    <option value="PA">PA - Pará</option>
+                    <option value="PB">PB - Paraíba</option>
+                    <option value="PR">PR - Paraná</option>
+                    <option value="PE">PE - Pernambuco</option>
+                    <option value="PI">PI - Piauí</option>
+                    <option value="RJ">RJ - Rio de Janeiro</option>
+                    <option value="RN">RN - Rio Grande do Norte</option>
+                    <option value="RS">RS - Rio Grande do Sul</option>
+                    <option value="RO">RO - Rondônia</option>
+                    <option value="RR">RR - Roraima</option>
+                    <option value="SC">SC - Santa Catarina</option>
+                    <option value="SP">SP - São Paulo</option>
+                    <option value="SE">SE - Sergipe</option>
+                    <option value="TO">TO - Tocantins</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <label for="linkedin" class="form-label">Linkedin</label>
+                  <input id="linkedin" name="linkedin" type="text" class="form-control" required placeholder="https://www.linkedin.com/in/exemplo" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Breve resumo -->
+          <section class="card section-card shadow-sm">
+            <div class="card-header bg-body-tertiary"><h2 class="h5 mb-0">Breve resumo sobre você</h2></div>
+            <div class="card-body">
+              <label for="aboutYou" class="form-label required-asterisk">Fale um pouco sobre você!</label>
+              <p style="color: yellow" class="mb-2">Conte, em poucas linhas, sua história, o que gosta de fazer, experiências marcantes e o que busca agora.</p>
+              <textarea id="aboutYou" name="aboutYou" class="form-control" rows="5" required placeholder="Escreva aqui..."></textarea>
+              <div class="invalid-feedback">Conte um breve resumo sobre você.</div>
+            </div>
+          </section>
+
+          <!-- Pretensão Salárial -->
+          <section class="card section-card shadow-sm">
+            <div class="card-header bg-body-tertiary"><h2 class="h5 mb-0">Pretensão Salárial</h2></div>
+
+            <div class="card-body">
+              <p style="color: yellow" class="mb-2">Nos diga o valor que gostaria de receber abaixo.</p>
+
+              <textarea id="salaryExpectations" name="salaryExpectations" class="form-control" rows="5" required placeholder="Escreva aqui..."></textarea>
+
+              <div class="invalid-feedback">Conte um breve resumo sobre você.</div>
+            </div>
+          </section>
+
+          <!-- Formação Acadêmica -->
+          <section class="card section-card shadow-sm">
+            <div class="card-header bg-body-tertiary"><h2 class="h5 mb-0">Formação Acadêmica</h2></div>
+            <div class="card-body">
+              <div id="formacoes" class="vstack gap-3"></div>
+              <div class="mt-3 text-end">
+                <button class="btn btn-outline-primary btn-sm" type="button" id="add-formacao">Adicionar formação</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Cursos (digitável) -->
+          <section class="card section-card shadow-sm">
+            <div class="card-header bg-body-tertiary"><h2 class="h5 mb-0">Cursos, certificações e treinamentos</h2></div>
+            <div class="card-body">
+              <label style="color: yellow" for="courses" class="form-label">Liste cursos relevantes que já fez</label>
+              <textarea
+                id="courses"
+                name="courses"
+                class="form-control"
+                rows="3"
+                placeholder="Ex.: Operações Logísticas; Atendimento ao Cliente; Excel Intermediário; NR-11..."
+              ></textarea>
+              <div class="form-text">Use ponto e vírgula ou vírgula para separar os cursos.</div>
+            </div>
+          </section>
+
+          <!-- Competências -->
+          <section class="card section-card shadow-sm">
+            <div class="card-header bg-body-tertiary"><h2 class="h5 mb-0">Competências</h2></div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="technicalSkills" class="form-label required-asterisk">Hard skills (competências técnicas)</label>
+                <p style="color: yellow" class="mb-2">
+                  Ferramentas e atividades que você domina (ex.: atendimento, planilhas, operação de sistemas, liderança de equipe, etc.).
+                </p>
+                <textarea
+                  id="technicalSkills"
+                  name="technicalSkills"
+                  class="form-control"
+                  rows="3"
+                  required
+                  placeholder="Descreva suas competências técnicas..."
+                ></textarea>
+                <div class="invalid-feedback">Descreva suas hard skills.</div>
+              </div>
+              <div>
+                <label for="softSkills" class="form-label">Soft skills (comportamentais)</label>
+                <p style="color: yellow" class="mb-2">Como você trabalha e se relaciona (ex.: comunicação, organização, proatividade, trabalho em equipe).</p>
+                <textarea id="softSkills" name="softSkills" class="form-control" rows="3" placeholder="Descreva suas soft skills..."></textarea>
+              </div>
+            </div>
+          </section>
+
+          <!-- Áreas de interesse -->
+          <section class="card section-card shadow-sm">
+            <div class="card-header bg-body-tertiary"><h2 class="h5 mb-0">Áreas de interesse (cargos)</h2></div>
+            <div class="card-body">
+              <label for="interestAreas" class="form-label">Além da vaga atual, há outras em que você gostaria de se candidatar?</label>
+              <textarea
+                id="interestAreas"
+                name="interestAreas"
+                class="form-control"
+                rows="3"
+                placeholder="Ex.: Operações, Atendimento, Comercial, Planejamento..."
+              ></textarea>
+              <div class="form-text">Usaremos isso para compor nosso banco de currículos.</div>
+            </div>
+          </section>
+
+          <!-- Experiências Profissionais -->
+          <section class="card section-card shadow-sm">
+            <div class="card-header bg-body-tertiary d-flex justify-content-between align-items-center">
+              <h2 class="h5 mb-0">Experiências Profissionais</h2>
+            </div>
+            <div class="card-body">
+              <p style="color: yellow" class="mb-2">Preencha as <strong>3 últimas empresas</strong>. Você pode adicionar ou remover experiências.</p>
+              <div id="experiencias" class="vstack gap-3"></div>
+              <div class="mt-3 text-end">
+                <button class="btn btn-outline-primary btn-sm" type="button" id="add-exp">Adicionar experiência</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Informações Adicionais -->
+          <section class="card section-card shadow-sm">
+            <div class="card-header bg-body-tertiary"><h2 class="h5 mb-0">Informações Adicionais</h2></div>
+            <div class="card-body">
+              <!-- Disponibilidade para início -->
+              <div class="mb-3">
+                <label for="availabilityStart" class="form-label required-asterisk">Disponibilidade para início</label>
+                <p style="color: yellow" class="mb-2">Caso aprovado, início imediato ou precisaria cumprir aviso? Se sim, quantos dias?</p>
+                <textarea
+                  id="availabilityStart"
+                  name="availabilityStart"
+                  class="form-control"
+                  rows="3"
+                  required
+                  placeholder="Ex.: imediato / 15 dias de aviso / 30 dias de aviso"
+                ></textarea>
+                <div class="invalid-feedback">Responda sobre sua disponibilidade.</div>
+              </div>
+
+              <hr class="thin-hr" />
+
+              <!-- Disponibilidade para horas extras -->
+              <fieldset class="mb-3">
+                <legend class="form-label required-asterisk">Disponibilidade para horas extras</legend>
+                <p style="color: yellow" class="form-text mb-2">
+                  Às vezes pode ser necessário ficar até mais tarde ou trabalhar em alguns sábados (pagos como hora extra). Você teria essa flexibilidade?
+                </p>
+                <div class="btn-group w-100" role="group" aria-label="Horas Extras">
+                  <input type="radio" class="btn-check" name="overtimeFlex" id="ot-yes" value="yes" required />
+                  <label class="btn btn-outline-primary" for="ot-yes">Sim</label>
+                  <input type="radio" class="btn-check" name="overtimeFlex" id="ot-no" value="no" />
+                  <label class="btn btn-outline-primary" for="ot-no">Não</label>
+                </div>
+              </fieldset>
+
+              <hr class="thin-hr" />
+
+              <!-- Interesse em desenvolvimento (PDI) -->
+              <fieldset class="mb-3">
+                <legend class="form-label required-asterisk">Interesse em desenvolvimento (PDI)</legend>
+                <p id="pdiHelp" style="color: yellow" class="form-text mb-2">
+                  Temos um programa de desenvolvimento com estudos, cursos, treinamentos e melhoria contínua. Você participaria mesmo exigindo dedicação fora do
+                  horário?
+                </p>
+                <div class="btn-group w-100" role="group" aria-label="Interesse PDI">
+                  <input type="radio" class="btn-check" name="pdiInterest" id="pdi-true" value="true" required />
+                  <label class="btn btn-outline-primary" for="pdi-true">Sim</label>
+                  <input type="radio" class="btn-check" name="pdiInterest" id="pdi-false" value="false" />
+                  <label class="btn btn-outline-primary" for="pdi-false">Não</label>
+                </div>
+              </fieldset>
+
+              <hr class="thin-hr" />
+
+              <!-- Regime de contratação (PJ) -->
+              <fieldset class="mb-2">
+                <legend class="form-label required-asterisk">Concorda em trabalhar no regime PJ?</legend>
+                <div class="btn-group w-100" role="group" aria-label="Regime PJ">
+                  <input type="radio" class="btn-check" name="hiringModel" id="pj-yes" value="true" required />
+                  <label class="btn btn-outline-primary" for="pj-yes">Sim</label>
+                  <input type="radio" class="btn-check" name="hiringModel" id="pj-no" value="false" />
+                  <label class="btn btn-outline-primary" for="pj-no">Não</label>
+                </div>
+              </fieldset>
+            </div>
+          </section>
+
+          <div class="row mt-3">
+            <div class="col-12"><button type="submit" class="btn btn-primary btn-lg w-100">Enviar</button></div>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <!-- Toasts -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      const q = (s, r = document) => r.querySelector(s);
+      const qa = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+      /* ---------- Toast helper ---------- */
+      function showToast(message, type = 'success', delay = 3500) {
+        const container = q('#toast-container');
+        const id = 't_' + Math.random().toString(36).slice(2);
+        const bg = type === 'success' ? 'bg-success' : type === 'warning' ? 'bg-warning text-dark' : 'bg-danger';
+        container.insertAdjacentHTML(
+          'beforeend',
+          `
+          <div id="${id}" class="toast align-items-center text-white ${bg}" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="${delay}">
+            <div class="d-flex">
+              <div class="toast-body">${message}</div>
+              <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+          </div>
+        `,
+        );
+        const el = q('#' + id);
+        const toast = new bootstrap.Toast(el);
+        toast.show();
+        el.addEventListener('hidden.bs.toast', () => el.remove());
+      }
+
+      /* ---------- Templates dinâmicos ---------- */
+      const formacaoTemplate = (i) => `
+        <div class="dyn-item card p-3">
+          <button type="button" class="btn btn-sm btn-outline-danger dyn-remove" aria-label="Remover">&times;</button>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label class="form-label required-asterisk" for="education-level-${i}">Nível de escolaridade</label>
+              <select id="education-level-${i}" name="education[${i}][level]" class="form-select" required>
+                <option value="" selected disabled>Selecione</option>
+                <option value="fundamental">Fundamental</option>
+                <option value="high_school">Ensino Médio</option>
+                <option value="technical">Técnico</option>
+                <option value="bachelor">Graduação</option>
+                <option value="postgrad">Pós-graduação</option>
+                <option value="master">Mestrado</option>
+                <option value="doctorate">Doutorado / PhD</option>
+              </select>
+              <div class="invalid-feedback">Selecione o nível.</div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label required-asterisk" for="education-course-${i}">Curso / Área</label>
+              <input id="education-course-${i}" name="education[${i}][course]" class="form-control" required placeholder="Ex.: Administração / Logística / Engenharia">
+              <div class="invalid-feedback">Informe o curso/área.</div>
+            </div>
+          </div>
+          <hr class="thin-hr">
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label class="form-label required-asterisk" for="education-institution-${i}">Instituição</label>
+              <input id="education-institution-${i}" name="education[${i}][institution]" class="form-control" required placeholder="Ex.: Universidade / Escola Técnica">
+              <div class="invalid-feedback">Informe a instituição.</div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label required-asterisk" for="education-year-${i}">Ano de conclusão</label>
+              <input id="education-year-${i}" type="number" name="education[${i}][graduationYear]" class="form-control" min="1950" max="2100" required placeholder="Ex.: 2024">
+              <div class="invalid-feedback">Informe o ano de conclusão.</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const experienciaTemplate = (i) => `
+        <div class="dyn-item card p-3">
+          <button type="button" class="btn btn-sm btn-outline-danger dyn-remove" aria-label="Remover">&times;</button>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label class="form-label required-asterisk" for="exp-company-${i}">Empresa</label>
+              <input id="exp-company-${i}" name="experience[${i}][company]" class="form-control" required placeholder="Nome da empresa">
+              <div class="invalid-feedback">Informe a empresa.</div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label required-asterisk" for="exp-position-${i}">Cargo</label>
+              <input id="exp-position-${i}" name="experience[${i}][position]" class="form-control" required placeholder="Ex.: Assistente / Analista / Líder">
+              <div class="invalid-feedback">Informe o cargo.</div>
+            </div>
+          </div>
+          <hr class="thin-hr">
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label class="form-label required-asterisk" for="exp-time-${i}">Tempo no cargo (anos)</label>
+              <input id="exp-time-${i}" type="number" name="experience[${i}][time]" class="form-control" step="0.1" min="0" placeholder="Ex.: 1.5" required>
+              <div class="invalid-feedback">Informe o tempo de experiência.</div>
+            </div>
+            <div class="col-12">
+              <label class="form-label required-asterisk" for="exp-resp-${i}">Principais atividades e responsabilidades</label>
+              <textarea id="exp-resp-${i}" name="experience[${i}][responsibilities]" class="form-control" rows="3" required placeholder="Resumo das atividades..."></textarea>
+              <div class="invalid-feedback">Descreva suas responsabilidades.</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      /* ---------- Dinâmica (mínimo: formação=1; experiências livre) ---------- */
+      (function () {
+        const formacoes = q('#formacoes');
+        const experiencias = q('#experiencias');
+        let fIdx = 0,
+          eIdx = 0;
+
+        function addFormacao() {
+          formacoes.insertAdjacentHTML('beforeend', formacaoTemplate(fIdx++));
+        }
+        function addExperiencia() {
+          experiencias.insertAdjacentHTML('beforeend', experienciaTemplate(eIdx++));
+        }
+
+        // Inicial: 1 formação e 3 experiências
+        addFormacao();
+        addExperiencia();
+        addExperiencia();
+        addExperiencia();
+
+        // Delegação: adicionar/remover
+        document.addEventListener('click', (ev) => {
+          const t = ev.target;
+          if (!(t instanceof HTMLElement)) return;
+
+          if (t.id === 'add-formacao') {
+            ev.preventDefault();
+            addFormacao();
+          }
+          if (t.id === 'add-exp') {
+            ev.preventDefault();
+            addExperiencia();
+          }
+
+          if (t.classList.contains('dyn-remove')) {
+            const wrap = t.closest('.dyn-item');
+            const parent = wrap?.parentElement;
+            if (!parent) return;
+            // mantém ao menos 1 formação
+            if (parent.id === 'formacoes' && parent.children.length <= 1) return;
+            // experiências: sem mínimo -> pode remover tudo
+            wrap.remove();
+          }
+        });
+      })();
+
+      /* ---------- Validação de grupos radio (btn-check) ---------- */
+      (function () {
+        const groups = ['hiringModel', 'overtimeFlex', 'pdiInterest'];
+        const form = q('#form-vaga');
+        function validateGroup(name) {
+          const inputs = qa(`input[type="radio"][name="${name}"]`);
+          if (!inputs.length) return;
+          const checked = inputs.some((i) => i.checked);
+          inputs.forEach((i) => i.setCustomValidity(checked ? '' : 'Selecione uma opção.'));
+        }
+        form.addEventListener('submit', () => groups.forEach(validateGroup));
+        document.addEventListener('change', (e) => {
+          if (e.target instanceof HTMLInputElement && e.target.type === 'radio' && groups.includes(e.target.name)) {
+            validateGroup(e.target.name);
+          }
+        });
+      })();
+
+      /* ---------- vagaId via URL/localStorage ---------- */
+      (function () {
+        const HIDDEN_ID = 'vagaId',
+          STORAGE_KEY = 'vagaId',
+          hidden = document.getElementById(HIDDEN_ID);
+        function getIdFromUrl() {
+          const qs = location.search;
+          if (!qs) return null;
+          const p = new URLSearchParams(qs);
+          const byName = p.get('vagaId');
+          if (byName) return byName.trim() || null;
+          if (qs.startsWith('?') && !qs.includes('=')) return qs.slice(1).trim() || null;
+          return null;
+        }
+        function setUrlId(id) {
+          if (!id) return;
+          const url = new URL(location.href);
+          if (!url.searchParams.get('vagaId')) {
+            url.searchParams.set('vagaId', id);
+            history.replaceState({}, '', url.pathname + '?' + url.searchParams.toString() + url.hash);
+          }
+        }
+        let id = getIdFromUrl();
+        if (id) localStorage.setItem(STORAGE_KEY, id);
+        else id = localStorage.getItem(STORAGE_KEY);
+        hidden.value = id || '';
+        if (id) setUrlId(id);
+      })();
+
+      /* ---------- Serialização & normalização ---------- */
+      function formToObject(fd) {
+        const obj = {};
+        for (const [key, value] of fd.entries()) {
+          if (key.startsWith('education[') || key.startsWith('experience[')) {
+            const m = key.match(/^(education|experience)\[(\d+)\]\[(\w+)\]$/);
+            if (m) {
+              const [, group, idxStr, field] = m;
+              const idx = Number(idxStr);
+              obj[group] = obj[group] || [];
+              obj[group][idx] = obj[group][idx] || {};
+              obj[group][idx][field] = value;
+            }
+          } else {
+            obj[key] = value;
+          }
+        }
+        return obj;
+      }
+
+      function normalizePayload(obj) {
+        if (obj.salaryExpectation) {
+          const raw = String(obj.salaryExpectation).replace(',', '.').trim();
+          if (!/^\d+(\.\d+)?$/.test(raw)) throw new Error('Pretensão salarial inválida.');
+          obj.salaryExpectation = raw;
+        }
+        if (typeof obj.hiringModel === 'string') obj.hiringModel = obj.hiringModel === 'true';
+        if (typeof obj.pdiInterest === 'string') obj.pdiInterest = obj.pdiInterest === 'true';
+        if (typeof obj.overtimeFlex === 'string') obj.overtimeFlex = obj.overtimeFlex === 'yes';
+
+        obj.education = (obj.education || []).filter(Boolean);
+        obj.experience = (obj.experience || []).filter(Boolean);
+
+        if (!obj.education.length) throw new Error('Adicione ao menos 1 formação.');
+        // Sem mínimo de experiências: usuário pode enviar 0..N
+
+        return obj;
+      }
+
+      /* ---------- Submit ---------- */
+      (function () {
+        const form = document.getElementById('form-vaga');
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        form.addEventListener(
+          'submit',
+          async function (ev) {
+            if (!form.checkValidity()) {
+              ev.preventDefault();
+              ev.stopPropagation();
+              const firstInvalid = form.querySelector(':invalid');
+              if (firstInvalid) firstInvalid.focus({ preventScroll: false });
+              form.classList.add('was-validated');
+              showToast('Há campos obrigatórios pendentes.', 'warning');
+              return;
+            }
+
+            ev.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Enviando...';
+
+            try {
+              const fd = new FormData(form);
+              const obj = formToObject(fd);
+              const normalized = normalizePayload(obj);
+
+              const baseUrl = 'https://thxtransportes.com.br';
+              const endpoint = `${baseUrl}/nest-workspace/rh/recrutamento-selecao/answers`;
+              // const endpoint = `http://localhost:3000/recrutamento-selecao/answers`;
+
+              const vagaId = String(normalized.vagaId || '').trim();
+              if (!vagaId) throw new Error('vagaId ausente (adicione ?vagaId=SEU_ID à URL).');
+
+              const { vagaId: _omit, ...body } = normalized;
+              const url = `${endpoint}?vagaId=${encodeURIComponent(vagaId)}`;
+
+              const controller = new AbortController();
+              const timer = setTimeout(() => controller.abort(), 15000);
+
+              const resp = await fetch(url, {
+                method: 'POST',
+                credentials: 'omit',
+                headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                body: JSON.stringify(body),
+              }).finally(() => clearTimeout(timer));
+
+              if (!resp.ok) {
+                const txt = await resp.text().catch(() => '');
+                throw new Error(`Falha ao enviar (${resp.status}): ${txt || resp.statusText}`);
+              }
+
+              showToast('Formulário enviado com sucesso!', 'success');
+              form.reset();
+              form.classList.remove('was-validated');
+            } catch (err) {
+              showToast(err.message || 'Erro ao validar/enviar.', 'error');
+            } finally {
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'Enviar';
+            }
+          },
+          false,
+        );
+      })();
+
+      let ENABLE_FORM_MOCK = false; // seguro por padrão; ligue só por URL
+
+      const MOCK_PRESETS = {
+        default: {
+          fullName: 'Maria Souza',
+          email: 'maria@exemplo.com',
+          city: 'Curitiba',
+          state: 'PR',
+          linkedin: 'https://www.linkedin.com/in/candidato/',
+          aboutYou: 'Profissional focada em operações e atendimento, com interesse em crescer na área.',
+          salaryExpectations: '5000',
+          courses: 'Excel Intermediário; Atendimento ao Cliente; Segurança no Trabalho',
+          education: [{ level: 'high_school', course: 'Ensino Médio', institution: 'Colégio Exemplo', graduationYear: '2018' }],
+          experience: [
+            { company: 'Empresa A', position: 'Assistente', time: '1.2', responsibilities: 'Atendimento, organização de documentos' },
+            { company: 'Empresa B', position: 'Analista', time: '2.0', responsibilities: 'Rotinas operacionais, relatórios' },
+            { company: 'Empresa C', position: 'Líder', time: '0.8', responsibilities: 'Coordenação de equipe, controle de metas' },
+          ],
+          technicalSkills: 'Atendimento ao cliente, controles em planilhas, organização de documentos',
+          softSkills: 'Comunicação, trabalho em equipe, responsabilidade',
+          interestAreas: 'Operações, Atendimento, Comercial',
+          availabilityStart: 'Imediato',
+          salaryExpectation: '3500',
+          overtimeFlex: 'yes',
+          pdiInterest: true,
+          hiringModel: true,
+        },
+        femsa: {
+          fullName: 'João Pereira',
+          email: 'joao@exemplo.com',
+          city: 'São Paulo',
+          state: 'SP',
+          aboutYou: 'Experiência em logística e atendimento, foco em melhoria contínua.',
+          salaryExpectations: '5000',
+          courses: 'Excel Avançado; NR-11; Atendimento ao Cliente',
+          education: [{ level: 'technical', course: 'Logística', institution: 'ETEC Exemplo', graduationYear: '2020' }],
+          experience: [{ company: 'FEMSA X', position: 'Operador', time: '1.0', responsibilities: 'Expedição, controle de estoque' }],
+          technicalSkills: 'Planilhas, ERP, conferência de carga',
+          softSkills: 'Organização, comunicação, trabalho em equipe',
+          interestAreas: 'Operações, Planejamento',
+          availabilityStart: '15 dias',
+          salaryExpectation: '4200',
+          overtimeFlex: 'yes',
+          pdiInterest: true,
+          hiringModel: true,
+        },
+      };
+
+      function decodeB64Json(b64) {
+        try {
+          const json = atob(b64.replace(/-/g, '+').replace(/_/g, '/')); // tolera base64url
+          return JSON.parse(json);
+        } catch {
+          return null;
+        }
+      }
+
+      async function resolveMockFromUrl() {
+        const params = new URLSearchParams(location.search);
+
+        // 1) mock=on|off|<preset>
+        const mockParam = params.get('mock');
+        // 2) mockUrl (fetch)
+        const mockUrl = params.get('mockUrl');
+        // 3) mockB64 (json inline)
+        const mockB64 = params.get('mockB64');
+
+        // prioridade: mock=off desliga tudo
+        if (mockParam && mockParam.toLowerCase() === 'off') {
+          return { enabled: false, data: null, source: 'off' };
+        }
+
+        // mockB64 tem prioridade sobre url e preset (mais explícito e independente de CORS)
+        if (mockB64) {
+          const data = decodeB64Json(mockB64);
+          if (data) return { enabled: true, data, source: 'b64' };
+          showToast('mockB64 inválido: não foi possível decodificar JSON.', 'error');
+        }
+
+        if (mockUrl) {
+          try {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), 8000);
+            const resp = await fetch(mockUrl, { headers: { Accept: 'application/json' }, signal: controller.signal });
+            clearTimeout(timer);
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const data = await resp.json();
+            return { enabled: true, data, source: 'url' };
+          } catch (e) {
+            showToast(`Falha ao carregar mockUrl (${e.message || e}). Verifique CORS/URL.`, 'error');
+          }
+        }
+
+        if (mockParam) {
+          // "on" => preset default; qualquer outro => busca em presets
+          if (mockParam.toLowerCase() === 'on') {
+            return { enabled: true, data: MOCK_PRESETS.default, source: 'preset:default' };
+          }
+          if (MOCK_PRESETS[mockParam]) {
+            return { enabled: true, data: MOCK_PRESETS[mockParam], source: `preset:${mockParam}` };
+          }
+          showToast(`Preset de mock não encontrado: "${mockParam}". Usando default.`, 'warning');
+          return { enabled: true, data: MOCK_PRESETS.default, source: 'preset:fallback-default' };
+        }
+
+        // sem parâmetros -> obedece a flag global (false por padrão)
+        return { enabled: ENABLE_FORM_MOCK, data: ENABLE_FORM_MOCK ? MOCK_PRESETS.default : null, source: 'flag' };
+      }
+
+      function setValueByName(name, value) {
+        const el = document.querySelector(`[name="${CSS.escape(name)}"]`);
+        if (!el) return;
+        if (el.type === 'radio') {
+          const radios = document.querySelectorAll(`input[type="radio"][name="${name}"]`);
+          radios.forEach((r) => (r.checked = r.value == String(value)));
+          return;
+        }
+        if (el.type === 'checkbox') {
+          el.checked = Boolean(value);
+          return;
+        }
+        el.value = value ?? '';
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+
+      // Aplica o mock resolvido
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          const { enabled, data, source } = await resolveMockFromUrl();
+          if (!enabled || !data) return;
+
+          // Campos simples
+          setValueByName('fullName', data.fullName);
+          setValueByName('email', data.email);
+          setValueByName('city', data.city);
+          setValueByName('state', data.state);
+          setValueByName('linkedin', data.linkedin);
+          setValueByName('aboutYou', data.aboutYou);
+          setValueByName('salaryExpectations', data.salaryExpectations);
+          setValueByName('courses', data.courses);
+          setValueByName('technicalSkills', data.technicalSkills);
+          setValueByName('softSkills', data.softSkills);
+          setValueByName('interestAreas', data.interestAreas);
+          setValueByName('availabilityStart', data.availabilityStart);
+          setValueByName('salaryExpectation', data.salaryExpectation);
+          setValueByName('overtimeFlex', data.overtimeFlex); // 'yes'|'no'
+          setValueByName('pdiInterest', data.pdiInterest ? 'true' : 'false');
+          setValueByName('hiringModel', data.hiringModel ? 'true' : 'false');
+
+          // Arrays
+          const edu = data.education?.[0];
+          if (edu) {
+            setValueByName('education[0][level]', edu.level);
+            setValueByName('education[0][course]', edu.course);
+            setValueByName('education[0][institution]', edu.institution);
+            setValueByName('education[0][graduationYear]', edu.graduationYear);
+          }
+          (data.experience || []).forEach((x, i) => {
+            setValueByName(`experience[${i}][company]`, x.company);
+            setValueByName(`experience[${i}][position]`, x.position);
+            setValueByName(`experience[${i}][time]`, x.time);
+            setValueByName(`experience[${i}][responsibilities]`, x.responsibilities);
+          });
+
+          showToast(`Mock aplicado (${source}).`, 'success');
+        } catch (err) {
+          showToast(`Erro ao aplicar mock: ${err.message || err}`, 'error');
+        }
+      });
+    </script>
+  </body>
+</html>
